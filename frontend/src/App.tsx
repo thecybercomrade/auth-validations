@@ -1,37 +1,23 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import axios from "axios";
 import Dashboard from "./components/Dashboard";
 
-const ProtectedRoute: React.FC<{ element: React.ReactNode }> = ({ element }) => {
-    const { isAuthenticated, isLoading } = useAuth0();
-
-    if (isLoading) return <div>Loading...</div>;
-
-    return isAuthenticated ? element : <Navigate to="/" />;
-};
-
-const LoginRedirect: React.FC = () => {
-    const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-
-    useEffect(() => {
-        if (!isAuthenticated && !isLoading) {
-            loginWithRedirect();
-        }
-    }, [isAuthenticated, isLoading, loginWithRedirect]);
-
-    return isAuthenticated ? <Navigate to="/dashboard" /> : <div>Redirecting...</div>;
-};
-
 const App: React.FC = () => {
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<LoginRedirect />} />
-                <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
-            </Routes>
-        </Router>
-    );
+  useEffect(() => {
+    axios.post("http://localhost:3000/auth/refresh", {}, { withCredentials: true })
+      .then(response => console.log("Token refreshed", response))
+      .catch(() => window.location.href = "http://localhost:3000/auth/login");
+  }, []);
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
+  );
 };
 
 export default App;

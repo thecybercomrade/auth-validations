@@ -1,31 +1,18 @@
 import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { sendPostRequest } from "../services/appServices";
-import config from "../config";
+import axios from "axios";
 
 const Dashboard: React.FC = () => {
-    const { user, logout, getAccessTokenSilently } = useAuth0();
+  const logout = () => {
+    axios.get("http://localhost:3000/auth/logout", { withCredentials: true })
+      .then(() => window.location.href = "http://localhost:3000/auth/login");
+  };
 
-    const handleApiRequest = async () => {
-        try {
-            const token = await getAccessTokenSilently();
-            const response = await sendPostRequest(token);
-            alert("API Response: " + JSON.stringify(response));
-        } catch (error) {
-            console.error("API call failed:", error);
-            alert("API call failed!");
-        }
-    };
-
-    return (
-        <div>
-            <h1>Welcome, {user?.name}!</h1>
-            <button onClick={handleApiRequest}>Send Request</button>
-            <button onClick={() => logout({ logoutParams: { returnTo: config.LOGOUT_REDIRECT } })}>
-                Logout
-            </button>
-        </div>
-    );
+  return (
+    <div>
+      <h1>Welcome to Dashboard</h1>
+      <button onClick={logout}>Logout</button>
+    </div>
+  );
 };
 
 export default Dashboard;
