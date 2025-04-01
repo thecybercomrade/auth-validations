@@ -1,18 +1,15 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5000"; // Java backend
+const API_BASE_URL = "http://localhost:8080"; // Java backend
 
-export const sendPostRequest = async (token: string) => {
+export const sendGetRequest = async () => {
     try {
-        const response = await axios.post(
-            `${API_BASE_URL}/protected-endpoint`, 
-            {},
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+        const response = await axios.get(`${API_BASE_URL}/aggregator/userdetails`, {
+            // headers: {
+            //     Authorization: `Bearer ${token}`,
+            // },
+            withCredentials: true
+        });
         return response.data;
     } catch (error) {
         console.error("Error calling API:", error);
