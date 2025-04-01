@@ -7,10 +7,11 @@ const {
   AUTH0_CALLBACK_URL,
   JWT_SECRET,
   REFRESH_SECRET,
+  AUTH0_AUDIENCE,
 } = require("../config");
 
 const login = (req, res) => {
-  const authUrl = `https://${AUTH0_DOMAIN}/authorize?response_type=code&client_id=${AUTH0_CLIENT_ID}&redirect_uri=${AUTH0_CALLBACK_URL}&scope=openid profile email`;
+  const authUrl = `https://${AUTH0_DOMAIN}/authorize?response_type=code&client_id=${AUTH0_CLIENT_ID}&redirect_uri=${AUTH0_CALLBACK_URL}&scope=openid profile email&audience=${AUTH0_AUDIENCE}`;
   res.redirect(authUrl);
 };
 
@@ -25,6 +26,7 @@ const callback = async (req, res) => {
       client_secret: AUTH0_CLIENT_SECRET,
       code,
       redirect_uri: AUTH0_CALLBACK_URL,
+      audience: AUTH0_AUDIENCE,
     });
 
     const { access_token, refresh_token, id_token } = response.data;
@@ -41,6 +43,7 @@ const callback = async (req, res) => {
 
     res.redirect("http://localhost:5173/dashboard");
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Authentication failed" });
   }
 };
