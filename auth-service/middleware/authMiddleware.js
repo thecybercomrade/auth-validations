@@ -9,7 +9,9 @@ const authenticateJWT = (req, res, next) => {
   }
 
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    console.log("Decoded JWT:", decoded);
     if (err) {
+      console.log("JWT verification error:", err);
       return res.status(403).json({ error: "Invalid token" });
     }
     req.user = decoded;
