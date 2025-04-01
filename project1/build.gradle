@@ -34,6 +34,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'com.nimbusds:nimbus-jose-jwt:9.37.2'
+	implementation 'com.azure:azure-security-keyvault-keys:4.6.2'
+	implementation 'com.azure:azure-identity:1.12.2'
 }
 
 dependencyManagement {

@@ -11,6 +11,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Arrays;
@@ -19,11 +20,8 @@ import java.util.Arrays;
 @Slf4j
 public class JwtAuthenticationFilter implements Filter {
 
-    private final JWTValidator jwtValidator;
-
-    public JwtAuthenticationFilter(JWTValidator jwtValidator) {
-        this.jwtValidator = jwtValidator;
-    }
+    @Autowired
+    JWTValidator jwtValidator;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
